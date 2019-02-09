@@ -6,6 +6,9 @@ class App extends Component {
     super();
     this.state = {
       data: ['', 'x', 'o', '', 'x', 'o', 'o', 'x', 'x'],
+      tie: 0,
+      player: 0,
+      computer: 0
     };
   }
   render() {
@@ -31,6 +34,22 @@ class App extends Component {
             <td>{this.state.data[8]}</td>
           </tr>
         </table>
+
+        {/* Records */}
+        <div className="records">
+          <div>
+            <div>PLAYER(X)</div>
+            <div>{this.state.player}</div>
+          </div>
+          <div>
+            <div>TIE</div>
+            <div>{this.state.tie}</div>
+          </div>
+          <div>
+            <div>COMPUTER(O)</div>
+            <div>{this.state.computer}</div>
+          </div>
+        </div>
         
       </div>
     );
