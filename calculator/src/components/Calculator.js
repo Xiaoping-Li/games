@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-
+import '../CSS/calculator.css';
 
 class Calculator extends Component {
   render() {
@@ -7,10 +7,10 @@ class Calculator extends Component {
       <div className="calculator">
         <form>
             <input type="text" />
-            <div>
-                {keys.map((key, idx) => <button key={idx}>{key}</button>)}
-            </div>
-        </form>
+        </form>    
+        <div className="buttons">
+            {keys.map((key, idx) => <button className="grid-item" key={idx}>{key}</button>)}
+        </div>  
       </div>
     );
   }

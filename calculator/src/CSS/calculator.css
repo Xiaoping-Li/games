@@ -1,0 +1,13 @@
+input {
+    width: 70%;
+    height: 50px;
+    margin-top: 5%;
+}
+
+.buttons {
+    margin: 5% 15%;
+    height: 250px;
+    display: grid;
+    grid-template: repeat(5, 1fr) / repeat(4, 1fr);
+    grid-gap: 10px;
+}
