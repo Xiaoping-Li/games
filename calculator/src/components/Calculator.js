@@ -16,6 +16,26 @@ class Calculator extends Component {
         this.setState({input: cleanRtn});
     }
 
+    checkInputValid = (str) => {
+        const brakets = str.split('').filter(item => item === '(' || item === ')');
+        let stack = [];
+        let valid = true;
+        for (let i = 0; i < brakets.length; i++) {
+            let item = brakets[i];
+            if (item === '(') {
+            stack.push(item);
+            } else {
+            if (!stack.length || stack[stack.length - 1] !== '(') {
+                valid = false;
+                break;
+            }
+            stack.pop();
+            }
+        }
+        if (stack.length) valid = false;
+        return valid;
+    }
+
     convertInput = str => {
         
     }
