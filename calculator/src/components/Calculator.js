@@ -16,6 +16,13 @@ class Calculator extends Component {
         this.setState({input: cleanRtn});
     }
 
+    // Check if the Operation Priority of current and the last item in the stack
+    highPriority = (current, prev) => {
+        if ((prev === '*' || prev === '/') && (current === '+') || current === '-') return false;
+        return true;
+    };
+
+    // Check if the input str has valid brackets pairs, return true / false
     checkInputValid = (str) => {
         const brakets = str.split('').filter(item => item === '(' || item === ')');
         let stack = [];
