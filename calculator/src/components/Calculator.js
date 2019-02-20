@@ -10,14 +10,22 @@ class Calculator extends Component {
         };
     }
 
+    handleClean = () => {
+        const n = this.state.input.length;
+        const cleanRtn = this.state.input.slice(0, n - 1);
+        this.setState({input: cleanRtn});
+    }
+
+    convertInput = str => {
+        
+    }
+
     handleClick = (e) => {
         const btnValue = e.target.value;
         if (btnValue === '=') {
             console.log('calculating...');
-            return;
-        } else if (btnValue === 'AC') {
-            console.log('deleting...');
-            return;
+        } else if (btnValue === 'C') {
+            this.handleClean();
         } else {
             const updateInput = this.state.input + btnValue;
             this.setState({input: updateInput});
@@ -49,4 +57,4 @@ class Calculator extends Component {
 
 export default Calculator;
 
-const keys = ['(', ')', '', 'AC', '7', '8', '9', '/', '4', '5', '6', 'x', '1', '2', '3', '-', '0', '.', '=', '+'];
+const keys = ['(', ')', '', 'C', '7', '8', '9', '/', '4', '5', '6', 'x', '1', '2', '3', '-', '0', '.', '=', '+'];
