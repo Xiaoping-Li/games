@@ -11,6 +11,7 @@ class Calculator extends Component {
         };
     }
 
+    /*handle clean function for button 'C', after calculated, set all states to original values */
     handleClean = () => {
       if (this.state.counted) {
         this.setState({input: '', result: 0, counted: !this.state.counted});
@@ -21,6 +22,7 @@ class Calculator extends Component {
       }   
     }
 
+    /* Functions including helper functions for Infix Expressions ---> Postfix Expressions*/
     // Check if the Operation Priority of current and the last item in the stack
     highPriority = (current, prev) => {
         if ((prev === '*' || prev === '/') && (current === '+' || current === '-')) return false;
@@ -123,6 +125,7 @@ class Calculator extends Component {
         return rtn;
     }
 
+    /*Calculate Postfix Expressions to final result, including helper functions */
     // Count the return from convertInput, get the final result
     countInput = converted => {
       let stack = [];
@@ -160,11 +163,13 @@ class Calculator extends Component {
       return stack.length > 1 ? 0 : Number(stack.pop());       
     }
 
+  /*Using btnValue to decide which button was clicked, the operators (+, -, *, /, (, ),), the number buttons,
+  or clean button 'C' */
   handleClick = (e) => {
     const btnValue = e.target.value;
     if (btnValue === '=') {
       if (!this.checkInputValid(this.state.input)) {
-        this.setState({input: 'Brackets pair error...'});
+        alert('Brackets pair error...');
       } else {
         let converted = this.convertInput(this.state.input);
         let answer = this.countInput(converted);
