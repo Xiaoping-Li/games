@@ -6,7 +6,7 @@ class Calculator extends Component {
         super();
         this.state = {
             input: '',
-            result: 0,
+            result: null,
         };
     }
 
@@ -18,7 +18,7 @@ class Calculator extends Component {
 
     // Check if the Operation Priority of current and the last item in the stack
     highPriority = (current, prev) => {
-        if ((prev === '*' || prev === '/') && (current === '+') || current === '-') return false;
+        if ((prev === '*' || prev === '/') && (current === '+' || current === '-')) return false;
         return true;
     };
 
@@ -43,13 +43,91 @@ class Calculator extends Component {
         return valid;
     }
 
+    // 中缀表达式转换为后缀表达式: Infix Expressions ---> Postfix Expressions
+    // A + B * C ---> A B C * +
     convertInput = str => {
+        let strArray = str.split('');
+        let inputArray = [];
+      
+        // split() will make number(like 123) to multiple digits (1,2,3), this function will combine
+        // separated digits to original num again
+        if (str.length < 2) {
+          inputArray.push(str);
+        } else {
+          let i = 0;
+          while (i < str.length) {
+            let item = strArray[i];
+            if (!Number(item)) {
+              inputArray.push(item);
+              i++;
+            } else {
+              let wholeNum = item;
+              let k = i + 1;
+              while (Number(strArray[k])) {
+                wholeNum += strArray[k];
+                k++;
+              }
+              inputArray.push(wholeNum);
+              i = k;
+            }
+          }
+        }
+      
+        // Incase to keep the original num instead of separated digits, save output into array as 'rtn'
+        let stack = [];
+        let rtn = [];
+        
+        for (let i = 0; i < inputArray.length; i++) {
+          let item = inputArray[i];
+          if (Number(item)) {
+            rtn.push(item);
+          } else {
+            if (!stack.length) {
+              stack.push(item);
+            } else {
+              if (item === ')') {
+                while(stack[stack.length - 1] !== '(' && stack.length) {
+                  rtn.push(stack.pop());
+                }
+                stack.pop();
+              } else {
+                let prev = stack[stack.length - 1];
+                let checkPriority = highPriority(item, prev);
+      
+                if (checkPriority) {
+                  stack.push(item);
+                } else {
+                  while (!checkPriority && stack.length && stack[stack.length - 1] !== '(') {
+                    rtn.push(stack.pop());
+                    prev = stack[stack.length - 1];
+                    checkPriority = highPriority(item, prev);
+                  }
+                  stack.push(item);
+                }
+              }
+            } 
+          }
+        }
+        
+        while (stack.length) {
+          rtn.push(stack.pop());;
+        }
+      
+        return rtn;
+    }
+
+    countInput = converted => {
         
     }
 
     handleClick = (e) => {
         const btnValue = e.target.value;
         if (btnValue === '=') {
+            if (!checkInputValid(this.state.input)) {
+                this.setState({input: 'Brackets pair error...'});
+            } else {
+
+            }
             console.log('calculating...');
         } else if (btnValue === 'C') {
             this.handleClean();
