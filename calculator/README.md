@@ -2,9 +2,9 @@
 ## Purpuse to write this App
 When we write math expression, Infix Expression is used, for example: `1+(2-3)*4+20/5`, sometimes there are even more nested brackets in the Infix Expression. It's easy for us to figure out the `operation priority`, like calculate expression inside the bracket first, or calculate '*' and '/' first, then '+' and '-'. But this is pretty hard for computer to calculate in this way. But if we convert Infix Expression to Post Expression, then it's easy for computer. 
 
-    | Infix Expression | Postfix Expression
---- | --- | ---
-    | 1+2 | 12+
-    | 1+(2-3) | 123-+
-    | 1+(2-3)\*4 | 123-4\*+
-    | 1+4*(2-3) | 1423-*+
+Infix Expression | Postfix Expression
+--- | ---
+1+2 | 12+
+1+(2-3) | 123-+
+1+(2-3)\*4 | 123-4\*+
+1+4*(2-3) | 1423-*+
