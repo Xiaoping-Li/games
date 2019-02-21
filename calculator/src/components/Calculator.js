@@ -6,14 +6,19 @@ class Calculator extends Component {
         super();
         this.state = {
             input: '',
-            result: null,
+            result: 0,
+            counted: false,
         };
     }
 
     handleClean = () => {
+      if (this.state.counted) {
+        this.setState({input: '', result: 0, counted: !this.state.counted});
+      } else {
         const n = this.state.input.length;
         const cleanRtn = this.state.input.slice(0, n - 1);
         this.setState({input: cleanRtn});
+      }   
     }
 
     // Check if the Operation Priority of current and the last item in the stack
@@ -24,23 +29,25 @@ class Calculator extends Component {
 
     // Check if the input str has valid brackets pairs, return true / false
     checkInputValid = (str) => {
-        const brakets = str.split('').filter(item => item === '(' || item === ')');
-        let stack = [];
-        let valid = true;
-        for (let i = 0; i < brakets.length; i++) {
-            let item = brakets[i];
-            if (item === '(') {
-            stack.push(item);
-            } else {
-            if (!stack.length || stack[stack.length - 1] !== '(') {
-                valid = false;
-                break;
-            }
-            stack.pop();
-            }
-        }
-        if (stack.length) valid = false;
-        return valid;
+      let valid = true;
+      const brakets = str.split('').filter(item => item === '(' || item === ')');
+      if (!brakets.length) return valid;
+      let stack = [];
+      
+      for (let i = 0; i < brakets.length; i++) {
+          let item = brakets[i];
+          if (item === '(') {
+          stack.push(item);
+          } else {
+          if (!stack.length || stack[stack.length - 1] !== '(') {
+              valid = false;
+              break;
+          }
+          stack.pop();
+          }
+      }
+      if (stack.length) valid = false;
+      return valid;
     }
 
     // 中缀表达式转换为后缀表达式: Infix Expressions ---> Postfix Expressions
@@ -92,7 +99,7 @@ class Calculator extends Component {
                 stack.pop();
               } else {
                 let prev = stack[stack.length - 1];
-                let checkPriority = highPriority(item, prev);
+                let checkPriority = this.highPriority(item, prev);
       
                 if (checkPriority) {
                   stack.push(item);
@@ -100,7 +107,7 @@ class Calculator extends Component {
                   while (!checkPriority && stack.length && stack[stack.length - 1] !== '(') {
                     rtn.push(stack.pop());
                     prev = stack[stack.length - 1];
-                    checkPriority = highPriority(item, prev);
+                    checkPriority = this.highPriority(item, prev);
                   }
                   stack.push(item);
                 }
@@ -153,46 +160,47 @@ class Calculator extends Component {
       return stack.length > 1 ? 0 : Number(stack.pop());       
     }
 
-    handleClick = (e) => {
-        const btnValue = e.target.value;
-        if (btnValue === '=') {
-            if (!checkInputValid(this.state.input)) {
-                this.setState({input: 'Brackets pair error...'});
-            } else {
-
-            }
-            console.log('calculating...');
-        } else if (btnValue === 'C') {
-            this.handleClean();
-        } else {
-            const updateInput = this.state.input + btnValue;
-            this.setState({input: updateInput});
-        }
+  handleClick = (e) => {
+    const btnValue = e.target.value;
+    if (btnValue === '=') {
+      if (!this.checkInputValid(this.state.input)) {
+        this.setState({input: 'Brackets pair error...'});
+      } else {
+        let converted = this.convertInput(this.state.input);
+        let answer = this.countInput(converted);
+        this.setState({ result: answer, counted: !this.state.counted });  
+      }    
+    } else if (btnValue === 'C') {
+      this.handleClean();
+    } else {
+      const updateInput = this.state.input + btnValue;
+      this.setState({input: updateInput});
     }
+  }
 
-    render() {
-        return (
-            <div className="calculator">
-                <div className="screen">
-                    {this.state.input}
-                </div>    
-                <div className="buttons">
-                    {keys.map((key, idx) => 
-                        <button 
-                            className="grid-item"
-                            value={key} 
-                            onClick={this.handleClick}
-                            key={idx}
-                        >
-                            {key}
-                        </button>
-                    )}
-                </div>  
-            </div>
-        );
-    }
+  render() {
+    return (
+      <div className="calculator">
+        <div className="screen">
+          {this.state.counted ? this.state.result : this.state.input}
+        </div>    
+        <div className="buttons">
+          {keys.map((key, idx) => 
+            <button 
+              className="grid-item"
+              value={key} 
+              onClick={this.handleClick}
+              key={idx}
+            >
+              {key}
+            </button>
+          )}
+        </div>  
+      </div>
+    );
+  }
 }
 
 export default Calculator;
 
-const keys = ['(', ')', '', 'C', '7', '8', '9', '/', '4', '5', '6', 'x', '1', '2', '3', '-', '0', '.', '=', '+'];
+const keys = ['(', ')', '', 'C', '7', '8', '9', '/', '4', '5', '6', '*', '1', '2', '3', '-', '0', '.', '=', '+'];
