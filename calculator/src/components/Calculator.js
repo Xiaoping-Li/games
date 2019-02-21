@@ -63,7 +63,7 @@ class Calculator extends Component {
             } else {
               let wholeNum = item;
               let k = i + 1;
-              while (Number(strArray[k]) || strArray[k] === '.') {
+              while (Number(strArray[k]) || Number(strArray[k]) === 0 || strArray[k] === '.') {
                 wholeNum += strArray[k];
                 k++;
               }
@@ -116,8 +116,41 @@ class Calculator extends Component {
         return rtn;
     }
 
+    // Count the return from convertInput, get the final result
     countInput = converted => {
-
+      let stack = [];
+      //let rtn = 0;
+      for (let i = 0; i < converted.length; i++) {
+        let item = converted[i];
+        if (Number(item)) {
+          stack.push(item);
+        } else {
+          // Pop out last two of stack, and use 'item' oprator
+          // push the return value to stack
+          if (stack.length < 2) return;
+          let temp;
+          let last = Number(stack.pop());
+          let last2 = Number(stack.pop());
+          switch(item) {
+            case "+":
+              temp = last2 + last;
+              break;
+            case "-":
+              temp = last2 - last;
+              break;
+            case "*":
+              temp = last2 * last;
+              break;
+            case "/":
+              temp = last2 / last;
+              break;
+          }
+    
+          stack.push(temp.toString())
+        }
+      }
+    
+      return stack.length > 1 ? 0 : Number(stack.pop());       
     }
 
     handleClick = (e) => {
