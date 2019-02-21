@@ -57,13 +57,13 @@ class Calculator extends Component {
           let i = 0;
           while (i < str.length) {
             let item = strArray[i];
-            if (!Number(item)) {
+            if (item === '+' || item === '-' || item === '*' || item === '/' || item === '(' || item === ')') {
               inputArray.push(item);
               i++;
             } else {
               let wholeNum = item;
               let k = i + 1;
-              while (Number(strArray[k])) {
+              while (Number(strArray[k]) || strArray[k] === '.') {
                 wholeNum += strArray[k];
                 k++;
               }
@@ -117,7 +117,7 @@ class Calculator extends Component {
     }
 
     countInput = converted => {
-        
+
     }
 
     handleClick = (e) => {
